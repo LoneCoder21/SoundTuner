@@ -7,7 +7,7 @@
     <body>
         <div>
             <h6>Global</h6>
-            <div class="slider">
+            <div class="slider flex">
                 <p class="title" for="gain">Gain</p>
                 <input
                     id="gain"
@@ -19,7 +19,7 @@
                 />
                 <p class="display" id="gaindisplay" for="gain">1.0</p>
             </div>
-            <div class="slider">
+            <div class="slider flex">
                 <p class="title" for="pan">Pan</p>
                 <input
                     id="pan"
@@ -30,6 +30,10 @@
                     step="any"
                 />
                 <p class="display" id="pandisplay" for="pan">1.0</p>
+            </div>
+            <div class="checkbox flex">
+                <p class="title" for="mono">Mono</p>
+                <input id="mono" type="checkbox"></input>
             </div>
         </div>
     </body>

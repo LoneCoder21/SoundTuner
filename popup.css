@@ -17,14 +17,16 @@ p {
     margin: 5px;
 }
 
-.slider {
+.flex {
     display: flex;
-    .title {
-        min-width: 40px;
-        text-align: right;
-    }
-    .display {
-        min-width: 40px;
-        text-align: left;
-    }
+}
+
+.title {
+    min-width: 40px;
+    text-align: right;
+}
+
+.display {
+    min-width: 40px;
+    text-align: left;
 }
