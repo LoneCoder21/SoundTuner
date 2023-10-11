@@ -7,8 +7,8 @@
     <body>
         <div>
             <h6>Global</h6>
-            <div class="gain">
-                <p class="title">Gain</p>
+            <div class="slider">
+                <p class="title" for="gain">Gain</p>
                 <input
                     id="gain"
                     type="range"
@@ -17,7 +17,19 @@
                     value="1.0"
                     step="any"
                 />
-                <p id="gaindisplay">1.0</p>
+                <p class="display" id="gaindisplay" for="gain">1.0</p>
+            </div>
+            <div class="slider">
+                <p class="title" for="pan">Pan</p>
+                <input
+                    id="pan"
+                    type="range"
+                    min="-1.0"
+                    max="+1.0"
+                    value="0.0"
+                    step="any"
+                />
+                <p class="display" id="pandisplay" for="pan">1.0</p>
             </div>
         </div>
     </body>
