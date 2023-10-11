@@ -1,0 +1,26 @@
+{
+    "name": "soundtuner",
+    "version": "1.0.0",
+    "description": "Extension to manipulate background sounds.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/LoneCoder21/SoundTuner.git"
+    },
+    "keywords": [
+        "sound"
+    ],
+    "author": "Abhinav Neelam <abhinavneelam949@gmail.com> (https://github.com/LoneCoder21)",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/LoneCoder21/SoundTuner/issues"
+    },
+    "homepage": "https://github.com/LoneCoder21/SoundTuner#readme",
+    "devDependencies": {
+        "prettier": "3.0.3",
+        "webextension-polyfill": "^0.10.0"
+    }
+}

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="popup.css" />
+    </head>
+    <body>
+        <div>
+            <h6>Global</h6>
+            <div class="gain">
+                <p class="title">Gain</p>
+                <input
+                    id="gain"
+                    type="range"
+                    min="0"
+                    max="5.0"
+                    value="1.0"
+                    step="any"
+                />
+                <p id="gaindisplay">1.0</p>
+            </div>
+        </div>
+    </body>
+    <script type="application/javascript" src="browser-polyfill.js"></script>
+    <script type="application/javascript" src="popup.js"></script>
+</html>
