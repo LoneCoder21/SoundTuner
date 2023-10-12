@@ -29,6 +29,5 @@
         "default_title": "SoundTuner",
         "default_popup": "popup.html"
     },
-    "permissions": ["tabs"],
-    "host_permissions": ["<all_urls>"]
+    "permissions": ["activeTab"]
 }
