@@ -21,7 +21,7 @@
             "js": ["content.js"],
             "all_frames": true,
             "match_about_blank": true,
-            "run_at": "document_start"
+            "run_at": "document_end"
         }
     ],
     "action": {
@@ -29,5 +29,5 @@
         "default_title": "SoundTuner",
         "default_popup": "popup.html"
     },
-    "permissions": ["activeTab"]
+    "permissions": ["activeTab", "storage"]
 }

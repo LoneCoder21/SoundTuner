@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     function getData() {
+        storage.local.set({ b: 3 }).then((response) => {
+            console.log(response);
+        });
         browser.tabs
             .query({ currentWindow: true, active: true })
             .then((tabs) => {
@@ -35,10 +38,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         .sendMessage(id, { command: "getData" })
                         .then((response) => {
                             data = response;
-                            gainrange.textContent = data.gain.toFixed(2);
-                            panrange.textContent = data.pan.toFixed(2);
-                            gainslider.value = data.gain.toFixed(2);
-                            panslider.value = data.pan.toFixed(2);
+                            gainrange.textContent = data.gain;
+                            panrange.textContent = data.pan;
+                            gainslider.value = data.gain;
+                            panslider.value = data.pan;
                         })
                         .catch((error) => {
                             console.log(error);
@@ -49,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(error);
             });
     }
-
+    console.log("sending");
     getData();
 
     function sendData() {
