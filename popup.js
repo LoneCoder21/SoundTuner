@@ -9,25 +9,58 @@ document.addEventListener("DOMContentLoaded", () => {
         pan: 0.0,
         mono: false,
     };
-
-    document.querySelector("#gain").addEventListener("input", (e) => {
+    document.querySelector("#gain").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);
         data.gain = value;
-        sendData();
+        //        sendData();
+        browser.permissions
+            .request({ origins: ["<all_urls>"] })
+            .then((r) => {
+                console.log("granted");
+            })
+            .catch((e) => {
+                console.log(e);
+            });
     });
 
-    document.querySelector("#pan").addEventListener("input", (e) => {
+    document.querySelector("#pan").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         panrange.textContent = value.toFixed(2);
         data.pan = value;
-        sendData();
+        //sendData();
     });
+    console.log("spawning...");
+    function spawnScript() {
+        browser.tabs
+            .query({ currentWindow: true, active: true })
+            .then((tabs) => {
+                for (const tab in tabs) {
+                    const id = tabs[tab].id;
+
+                    browser.scripting
+                        .executeScript({
+                            target: {
+                                tabId: id,
+                                allFrames: true,
+                            },
+                            files: ["content.js"],
+                        })
+                        .then((response) => {
+                            console.log(response);
+                        })
+                        .catch((e) => {
+                            console.log(e);
+                        });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+    spawnScript();
 
     function getData() {
-        storage.local.set({ b: 3 }).then((response) => {
-            console.log(response);
-        });
         browser.tabs
             .query({ currentWindow: true, active: true })
             .then((tabs) => {
@@ -52,8 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(error);
             });
     }
-    console.log("sending");
-    getData();
+    //getData();
 
     function sendData() {
         browser.tabs

@@ -10,17 +10,6 @@
         mono: false,
     };
 
-    let context = new AudioContext();
-    const gain = context.createGain();
-
-    // const source = context.createMediaElementSource(audioElement);
-    // source.connect(gain);
-    // gain.connect(context.destination);
-
-    function setData() {
-        gain.gain.value = data.gain;
-    }
-
     console.log("content ready");
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
