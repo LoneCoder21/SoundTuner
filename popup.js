@@ -9,28 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
         pan: 0.0,
         mono: false,
     };
+
     document.querySelector("#gain").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);
         data.gain = value;
-        //        sendData();
-        browser.permissions
-            .request({ origins: ["<all_urls>"] })
-            .then((r) => {
-                console.log("granted");
-            })
-            .catch((e) => {
-                console.log(e);
-            });
+        sendData();
     });
 
     document.querySelector("#pan").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         panrange.textContent = value.toFixed(2);
         data.pan = value;
-        //sendData();
+        sendData();
     });
-    console.log("spawning...");
+
     function spawnScript() {
         browser.tabs
             .query({ currentWindow: true, active: true })
@@ -58,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(error);
             });
     }
-    spawnScript();
+    //spawnScript();
 
     function getData() {
         browser.tabs
@@ -71,10 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         .sendMessage(id, { command: "getData" })
                         .then((response) => {
                             data = response;
-                            gainrange.textContent = data.gain;
-                            panrange.textContent = data.pan;
-                            gainslider.value = data.gain;
-                            panslider.value = data.pan;
+                            gainrange.textContent = data.gain.toFixed(2);
+                            panrange.textContent = data.pan.toFixed(2);
+                            gainslider.value = data.gain.toFixed(2);
+                            panslider.value = data.pan.toFixed(2);
                         })
                         .catch((error) => {
                             console.log(error);
@@ -85,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log(error);
             });
     }
-    //getData();
+    getData();
 
     function sendData() {
         browser.tabs
