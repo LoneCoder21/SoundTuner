@@ -24,35 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
         sendData();
     });
 
-    function spawnScript() {
-        browser.tabs
-            .query({ currentWindow: true, active: true })
-            .then((tabs) => {
-                for (const tab in tabs) {
-                    const id = tabs[tab].id;
-
-                    browser.scripting
-                        .executeScript({
-                            target: {
-                                tabId: id,
-                                allFrames: true,
-                            },
-                            files: ["content.js"],
-                        })
-                        .then((response) => {
-                            console.log(response);
-                        })
-                        .catch((e) => {
-                            console.log(e);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-    //spawnScript();
-
     function getData() {
         browser.tabs
             .query({ currentWindow: true, active: true })

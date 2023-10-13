@@ -10,22 +10,33 @@
         mono: false,
     };
 
+    let context = new AudioContext();
+    const gain = context.createGain();
+    gain.connect(context.destination);
+
+    let elements = [];
+
     console.log("content ready");
+    const observer = new MutationObserver((records) => {
+        for (const record of records) {
+            record.addedNodes.forEach((node) => {
+                const name = node.nodeName.toLowerCase();
+                if (!(name === "video" || name === "audio")) return;
+                console.log(node);
+                const source = context.createMediaElementSource(node);
+                source.connect(gain);
+            });
+        }
+    });
+    var container = document.documentElement || document.body;
+
+    observer.observe(container, {
+        childList: true,
+        subtree: true,
+    });
 
     function setData() {
-        const elements = document.querySelectorAll("video", "audio");
-        console.log(elements);
-
-        let context = new AudioContext();
-        const gain = new GainNode(context, {
-            value: data.gain,
-        });
-
-        for (const element in elements) {
-            const source = context.createMediaElementSource(element);
-            source.connect(gain);
-            gain.connect(context.destination);
-        }
+        gain.gain.value = data.gain;
     }
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
