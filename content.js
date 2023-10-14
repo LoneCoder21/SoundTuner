@@ -11,10 +11,11 @@
     };
 
     let context = new AudioContext();
+    let context_channels = context.destination.channelCount;
     const gain = context.createGain();
+    const pan = context.createStereoPanner();
+    pan.connect(gain);
     gain.connect(context.destination);
-
-    let elements = [];
 
     console.log("content ready");
     const observer = new MutationObserver((records) => {
@@ -24,7 +25,7 @@
                 if (!(name === "video" || name === "audio")) return;
                 console.log(node);
                 const source = context.createMediaElementSource(node);
-                source.connect(gain);
+                source.connect(pan);
             });
         }
     });
@@ -37,6 +38,8 @@
 
     function setData() {
         gain.gain.value = data.gain;
+        pan.pan.value = data.pan;
+        context.destination.channelCount = data.mono ? 1 : context_channels;
     }
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {

@@ -24,6 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
         sendData();
     });
 
+    document.querySelector("#mono").addEventListener("change", (e) => {
+        let value = e.target.checked;
+        data.mono = value;
+        sendData();
+    });
+
     function getData() {
         browser.tabs
             .query({ currentWindow: true, active: true })
