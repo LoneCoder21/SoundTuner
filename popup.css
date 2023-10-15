@@ -61,3 +61,14 @@ button {
 button:hover {
     background-color: #f55050;
 }
+
+#default_button,
+#reset_button {
+    background-color: grey;
+    color: white;
+}
+
+#default_button:hover,
+#reset_button:hover {
+    background-color: rgb(0, 202, 0);
+}

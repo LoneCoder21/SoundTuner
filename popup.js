@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const panrange = document.querySelector("#pandisplay");
     const gainslider = document.querySelector("#gain");
     const panslider = document.querySelector("#pan");
+    const monocheckbox = document.querySelector("#mono");
 
     let data = {
         gain: 1.0,
@@ -27,6 +28,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#mono").addEventListener("change", (e) => {
         let value = e.target.checked;
         data.mono = value;
+        sendData();
+    });
+
+    document.querySelector("#default_button").addEventListener("click", () => {
+        data = { gain: 1.0, pan: 0.0, mono: false };
+        gainrange.textContent = data.gain.toFixed(2);
+        panrange.textContent = data.pan.toFixed(2);
+        gainslider.value = data.gain.toFixed(2);
+        panslider.value = data.pan.toFixed(2);
+        monocheckbox.checked = data.mono;
         sendData();
     });
 
