@@ -30,3 +30,11 @@ p {
     min-width: 40px;
     text-align: left;
 }
+
+input[type="range"] {
+    accent-color: #f55050;
+}
+
+input[type="checkbox"] {
+    accent-color: #f55050;
+}
