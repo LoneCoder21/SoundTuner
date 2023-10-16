@@ -40,6 +40,15 @@
         context.destination.channelCount = data.mono ? 1 : context_channels;
     }
 
+    async function loadData() {
+        const response = await browser.runtime.sendMessage({
+            type: "getInitialData",
+        });
+        data = { ...response };
+        setData();
+    }
+    loadData();
+
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         switch (message.command) {
             case "setData":
