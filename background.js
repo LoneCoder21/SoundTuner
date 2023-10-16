@@ -1,20 +1,12 @@
-browser.webNavigation.onCompleted.addListener((details) => {
-    console.log("This is my favorite website!");
-    return;
-    browser.scripting
-        .executeScript({
-            target: {
-                tabId: details.tabId,
-                allFrames: true,
-            },
-            files: ["content.js"],
-        })
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((e) => {
-            console.log(e);
-        });
-});
+let session = {};
 
-browser.browserAction.onClicked.addListener(() => {});
+browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === "setSession") {
+        const { tabid, data } = request;
+        session[tabid] = data;
+    } else if (request.type === "getSession") {
+        const { tabid } = request;
+        const data = session[tabid];
+        sendResponse(data);
+    }
+});

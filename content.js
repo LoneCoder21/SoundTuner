@@ -17,13 +17,11 @@
     pan.connect(gain);
     gain.connect(context.destination);
 
-    console.log("content ready");
     const observer = new MutationObserver((records) => {
         for (const record of records) {
             record.addedNodes.forEach((node) => {
                 const name = node.nodeName.toLowerCase();
                 if (!(name === "video" || name === "audio")) return;
-                console.log(node);
                 const source = context.createMediaElementSource(node);
                 source.connect(pan);
             });
@@ -44,9 +42,6 @@
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         switch (message.command) {
-            case "getData":
-                sendResponse(data);
-                break;
             case "setData":
                 data = message.data;
                 setData();

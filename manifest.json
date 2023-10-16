@@ -38,6 +38,8 @@
         "storage",
         "scripting",
         "webNavigation",
+        "storage",
+        "unlimitedStorage",
         "<all_urls>"
     ],
     "background": {

@@ -32,61 +32,105 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelector("#default_button").addEventListener("click", () => {
-        data = { gain: 1.0, pan: 0.0, mono: false };
+        applySettings({ gain: 1.0, pan: 0.0, mono: false });
+        sendData();
+    });
+
+    document
+        .querySelector("#domain_button")
+        .addEventListener("click", () => {});
+
+    document.querySelector("#page_button").addEventListener("click", () => {
+        //console.log(browser.storage.local.get("a"));
+    });
+
+    async function saveDomainCache() {
+        const url = await getUrl();
+        const domain = url[0];
+        const fullurl = url[1];
+        const store = await browser.storage.local.get(domain);
+        const l = await browser.storage.local.set({
+            [domain]: { ...store, hostname: { gain, pan, mono } },
+        });
+    }
+
+    async function loadSettings() {
+        const cache = await getCache();
+
+        const tab = await getCurrentTab();
+        const tabid = tab.id;
+
+        const response = await browser.runtime.sendMessage({
+            type: "getSession",
+            tabid,
+        });
+
+        let settings = cache
+            ? { ...cache }
+            : { gain: 1.0, pan: 0.0, mono: false };
+        settings = response ? { ...response } : settings;
+        applySettings(settings);
+    }
+    loadSettings();
+
+    async function getCurrentTab() {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true,
+        });
+        return tabs[0];
+    }
+
+    async function getUrl() {
+        const tab = await getCurrentTab();
+        const url = tab.url;
+        const noprotocol = url.replace(/(^\w+:|^)\/\//, ""); // strip protocol
+        const nohash = noprotocol.split("#")[0]; // strip hashes
+        const domain = new URL(url).hostname;
+
+        return [domain, nohash];
+    }
+
+    async function getCache() {
+        const url = await getUrl();
+        const domain = url[0];
+        const fullurl = url[1];
+        const store = await browser.storage.local.get(domain);
+        const domaindata = store[domain]?.["hostname"];
+        const fulldata = store[domain]?.[fullurl];
+        const cache = fulldata ? fulldata : domaindata;
+        return cache;
+    }
+
+    function applySettings(settings) {
+        data = { ...settings };
         gainrange.textContent = data.gain.toFixed(2);
         panrange.textContent = data.pan.toFixed(2);
         gainslider.value = data.gain.toFixed(2);
         panslider.value = data.pan.toFixed(2);
         monocheckbox.checked = data.mono;
-        sendData();
-    });
-
-    function getData() {
-        browser.tabs
-            .query({ currentWindow: true, active: true })
-            .then((tabs) => {
-                for (const tab in tabs) {
-                    const id = tabs[tab].id;
-
-                    browser.tabs
-                        .sendMessage(id, { command: "getData" })
-                        .then((response) => {
-                            data = response;
-                            gainrange.textContent = data.gain.toFixed(2);
-                            panrange.textContent = data.pan.toFixed(2);
-                            gainslider.value = data.gain.toFixed(2);
-                            panslider.value = data.pan.toFixed(2);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
     }
-    getData();
 
-    function sendData() {
-        browser.tabs
-            .query({ currentWindow: true, active: true })
-            .then((tabs) => {
-                for (const tab in tabs) {
-                    const id = tabs[tab].id;
+    async function sendData() {
+        const tabs = await browser.tabs.query({
+            currentWindow: true,
+            active: true,
+        });
+        for (const tab in tabs) {
+            const id = tabs[tab].id;
 
-                    browser.tabs
-                        .sendMessage(id, {
-                            command: "setData",
-                            data,
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
-                }
-            })
-            .catch((error) => {
-                console.log(error);
+            browser.tabs.sendMessage(id, {
+                command: "setData",
+                data,
             });
+        }
+
+        const tabid = tabs[0].id;
+
+        const response = await browser.runtime.sendMessage({
+            type: "setSession",
+            tabid,
+            data,
+        });
     }
 });
