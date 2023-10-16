@@ -9,7 +9,7 @@
         pan: 0.0,
         mono: false,
     };
-
+    console.log("content");
     let context = new AudioContext();
     let context_channels = context.destination.channelCount;
     const gain = context.createGain();
@@ -22,6 +22,7 @@
             record.addedNodes.forEach((node) => {
                 const name = node.nodeName.toLowerCase();
                 if (!(name === "video" || name === "audio")) return;
+                console.log(node);
                 const source = context.createMediaElementSource(node);
                 source.connect(pan);
             });
@@ -40,7 +41,10 @@
         context.destination.channelCount = data.mono ? 1 : context_channels;
     }
 
+    console.log(document.querySelectorAll("video", "audio"));
+
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+        console.log("fadsfdas");
         switch (message.command) {
             case "setData":
                 data = message.data;
