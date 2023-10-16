@@ -17,6 +17,7 @@
     pan.connect(gain);
     gain.connect(context.destination);
 
+    // TODO - Deal with shadow roots
     const observer = new MutationObserver((records) => {
         for (const record of records) {
             record.addedNodes.forEach((node) => {
