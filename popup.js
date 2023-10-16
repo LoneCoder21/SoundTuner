@@ -11,8 +11,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mono: false,
     };
 
-    console.log("fadsfdasf");
-
     document.querySelector("#gain").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);
