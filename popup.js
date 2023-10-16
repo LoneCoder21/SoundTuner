@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
         mono: false,
     };
 
+    console.log("fadsfdasf");
+
     document.querySelector("#gain").addEventListener("change", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);
@@ -41,7 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelector("#page_button").addEventListener("click", () => {
-        //console.log(browser.storage.local.get("a"));
+        savePageCache();
+    });
+
+    document.querySelector("#reset_button").addEventListener("click", () => {
+        clearDomainCache();
     });
 
     async function saveDomainCache() {
@@ -52,6 +58,23 @@ document.addEventListener("DOMContentLoaded", () => {
         const l = await browser.storage.local.set({
             [domain]: { ...store, hostname: { ...data } },
         });
+    }
+
+    async function savePageCache() {
+        const url = await getUrl();
+        const domain = url[0];
+        const fullurl = url[1];
+        const store = await browser.storage.local.get(domain);
+        const l = await browser.storage.local.set({
+            [domain]: { ...store, [fullurl]: { ...data } },
+        });
+    }
+
+    async function clearDomainCache() {
+        const url = await getUrl();
+        const domain = url[0];
+        const fullurl = url[1];
+        const l = await browser.storage.local.remove(domain);
     }
 
     async function loadSettings() {
