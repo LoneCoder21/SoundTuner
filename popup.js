@@ -33,12 +33,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelector("#default_button").addEventListener("click", () => {
         applySettings({ gain: 1.0, pan: 0.0, mono: false });
-        sendData();
     });
 
-    document
-        .querySelector("#domain_button")
-        .addEventListener("click", () => {});
+    // TODO - add notifications for cache buttons
+    document.querySelector("#domain_button").addEventListener("click", () => {
+        saveDomainCache();
+    });
 
     document.querySelector("#page_button").addEventListener("click", () => {
         //console.log(browser.storage.local.get("a"));
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const fullurl = url[1];
         const store = await browser.storage.local.get(domain);
         const l = await browser.storage.local.set({
-            [domain]: { ...store, hostname: { gain, pan, mono } },
+            [domain]: { ...store, hostname: { ...data } },
         });
     }
 
@@ -109,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         gainslider.value = data.gain.toFixed(2);
         panslider.value = data.pan.toFixed(2);
         monocheckbox.checked = data.mono;
+        sendData();
     }
 
     async function sendData() {
@@ -116,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentWindow: true,
             active: true,
         });
+
         for (const tab in tabs) {
             const id = tabs[tab].id;
 
