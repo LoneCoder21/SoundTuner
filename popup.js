@@ -52,7 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = await getUrl();
         const domain = url[0];
         const fullurl = url[1];
-        const store = await browser.storage.local.get(domain);
+        const all_store = await browser.storage.local.get(domain);
+        const store = all_store[domain];
         const l = await browser.storage.local.set({
             [domain]: { ...store, hostname: { ...data } },
         });
@@ -62,7 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const url = await getUrl();
         const domain = url[0];
         const fullurl = url[1];
-        const store = await browser.storage.local.get(domain);
+        const all_store = await browser.storage.local.get(domain);
+        const store = all_store[domain];
+
         const l = await browser.storage.local.set({
             [domain]: { ...store, [fullurl]: { ...data } },
         });
@@ -86,10 +89,8 @@ document.addEventListener("DOMContentLoaded", () => {
             tabid,
         });
 
-        let settings = cache
-            ? { ...cache }
-            : { gain: 1.0, pan: 0.0, mono: false };
-        settings = response ? { ...response } : settings;
+        let settings = cache ? cache : { gain: 1.0, pan: 0.0, mono: false };
+        settings = response ? response : settings;
         applySettings(settings);
     }
     loadSettings();
