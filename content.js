@@ -42,7 +42,14 @@
         context.destination.channelCount = data.mono ? 1 : context_channels;
     }
 
-    console.log(document.querySelectorAll("video", "audio"));
+    async function loadData() {
+        const response = await browser.runtime.sendMessage({
+            type: "getInitialData",
+        });
+        data = { ...response };
+        setData();
+    }
+    loadData();
 
     browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
         console.log("fadsfdas");
