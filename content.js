@@ -20,17 +20,49 @@
     // TODO - Deal with shadow roots
     const observer = new MutationObserver((records) => {
         for (const record of records) {
-            record.addedNodes.forEach((node) => {
-                const name = node.nodeName.toLowerCase();
-                if (!(name === "video" || name === "audio")) return;
-                const source = context.createMediaElementSource(node);
-                source.connect(pan);
+            record.addedNodes.forEach((newnode) => {
+                function look(node, inShadowRoot) {
+                    const name = node.nodeName.toLowerCase();
+
+                    if (node.shadowRoot) {
+                        //console.log(node, "shadow");
+                        observer.observe(node, {
+                            childList: true,
+                            subtree: true,
+                        });
+
+                        for (const child of node.children) {
+                            //console.log(child);
+                            look(child, true);
+                        }
+                    } else {
+                        //console.log(node, "noshadow");
+                        if (name === "video" || name === "audio") {
+                            //console.log(node);
+                            context.createMediaElementSource(node).connect(pan);
+                            return;
+                        } else {
+                            if (inShadowRoot) {
+                                for (const child of node.children) {
+                                    look(child, true);
+                                }
+                            }
+                        }
+                    }
+                }
+                look(newnode, false);
             });
         }
     });
-    var container = document.documentElement || document.body;
 
-    observer.observe(container, {
+    //console.log(document);
+    //console.log(document.body);
+
+    let target = document;
+    //target = document.children[0].children[1];
+    //console.log(target);
+
+    observer.observe(document, {
         childList: true,
         subtree: true,
     });
