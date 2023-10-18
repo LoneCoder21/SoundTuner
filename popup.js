@@ -35,17 +35,34 @@ document.addEventListener("DOMContentLoaded", () => {
         applySettings({ gain: 1.0, pan: 0.0, mono: false });
     });
 
-    // TODO - add notifications for cache buttons
     document.querySelector("#domain_button").addEventListener("click", () => {
         saveDomainCache();
+        browser.notifications.create({
+            type: "basic",
+            iconUrl: browser.extension.getURL("icon.png"),
+            title: "SoundTuner",
+            message: "Saved for current domain",
+        });
     });
 
     document.querySelector("#page_button").addEventListener("click", () => {
         savePageCache();
+        browser.notifications.create({
+            type: "basic",
+            iconUrl: browser.extension.getURL("icon.png"),
+            title: "SoundTuner",
+            message: "Saved for current page",
+        });
     });
 
     document.querySelector("#reset_button").addEventListener("click", () => {
         clearDomainCache();
+        browser.notifications.create({
+            type: "basic",
+            iconUrl: browser.extension.getURL("icon.png"),
+            title: "SoundTuner",
+            message: "Cleared all cache",
+        });
     });
 
     async function saveDomainCache() {
