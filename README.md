@@ -2,6 +2,10 @@
 
 Extension to manipulate background sounds. Can lower/increase volume, add pan and mono. Can also save background sounds per website for future visits.
 
+## Screenshots
+
+![Home](screenshot.png)
+
 ## Prerequisites
 
 -   [npm](https://www.npmjs.com)
