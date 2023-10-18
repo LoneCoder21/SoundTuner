@@ -21,47 +21,41 @@
     const observer = new MutationObserver((records) => {
         for (const record of records) {
             record.addedNodes.forEach((newnode) => {
-                function look(node, inShadowRoot) {
+                function look(node) {
                     const name = node.nodeName.toLowerCase();
+                    Object.defineProperty(node, "aaaaaaaaaaaa", {
+                        value: 1,
+                        writable: false,
+                    });
+                    console.log(node);
+                    if (name === "shreddit-app") {
+                    }
 
-                    if (node.shadowRoot) {
-                        //console.log(node, "shadow");
-                        observer.observe(node, {
-                            childList: true,
-                            subtree: true,
-                        });
-
-                        for (const child of node.children) {
-                            //console.log(child);
-                            look(child, true);
-                        }
+                    //console.log(node, "noshadow");
+                    if (name === "video" || name === "audio") {
+                        console.log("observer", node);
+                        context.createMediaElementSource(node).connect(pan);
+                        return;
                     } else {
-                        //console.log(node, "noshadow");
-                        if (name === "video" || name === "audio") {
-                            //console.log(node);
-                            context.createMediaElementSource(node).connect(pan);
-                            return;
-                        } else {
-                            if (inShadowRoot) {
-                                for (const child of node.children) {
-                                    look(child, true);
+                        const proxy = new Proxy(node, {
+                            set(obj, prop, value) {
+                                if (prop === "shadowRoot") {
+                                    // shadowRoot updated
+                                    console.log("updated shadow root", value);
                                 }
-                            }
-                        }
+                                return Reflect.set(...arguments);
+                            },
+                        });
                     }
                 }
-                look(newnode, false);
+                look(newnode);
             });
         }
     });
 
-    //console.log(document);
-    //console.log(document.body);
-
-    let target = document;
-    //target = document.children[0].children[1];
-    //console.log(target);
-
+    document.querySelectorAll("video", "audio").forEach((node) => {
+        context.createMediaElementSource(node).connect(pan);
+    });
     observer.observe(document, {
         childList: true,
         subtree: true,

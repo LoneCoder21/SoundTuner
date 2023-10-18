@@ -143,10 +143,14 @@ document.addEventListener("DOMContentLoaded", () => {
         for (const tab in tabs) {
             const id = tabs[tab].id;
 
-            browser.tabs.sendMessage(id, {
-                command: "setData",
-                data,
-            });
+            browser.tabs
+                .sendMessage(id, {
+                    command: "setData",
+                    data,
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         }
 
         const tabid = tabs[0].id;
