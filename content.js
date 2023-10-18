@@ -23,14 +23,15 @@
             record.addedNodes.forEach((node) => {
                 const name = node.nodeName.toLowerCase();
                 if (!(name === "video" || name === "audio")) return;
-                const source = context.createMediaElementSource(node);
-                source.connect(pan);
+                context.createMediaElementSource(node).connect(pan);
             });
         }
     });
-    var container = document.documentElement || document.body;
 
-    observer.observe(container, {
+    document.querySelectorAll("video", "audio").forEach((node) => {
+        context.createMediaElementSource(node).connect(pan);
+    });
+    observer.observe(document, {
         childList: true,
         subtree: true,
     });
