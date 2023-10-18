@@ -5,11 +5,6 @@
     "author": "Abhinav Neelam",
     "description": "Extension to manipulate background sounds. Can lower/increase volume, add pan and mono. Can also save background sounds per website for future visits.",
     "homepage_url": "https://github.com/LoneCoder21/SoundTuner",
-    "browser_specific_settings": {
-        "gecko": {
-            "id": "abhinavneelam949@gmail.com"
-        }
-    },
     "icons": {
         "48": "icon.png",
         "96": "icon.png"
@@ -35,9 +30,6 @@
     ],
     "permissions": [
         "activeTab",
-        "storage",
-        "scripting",
-        "webNavigation",
         "storage",
         "unlimitedStorage",
         "notifications",

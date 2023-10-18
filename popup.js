@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
         saveDomainCache();
         browser.notifications.create({
             type: "basic",
-            iconUrl: browser.extension.getURL("icon.png"),
+            iconUrl: browser.runtime.getURL("icon.png"),
             title: "SoundTuner",
             message: "Saved for current domain",
         });
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         savePageCache();
         browser.notifications.create({
             type: "basic",
-            iconUrl: browser.extension.getURL("icon.png"),
+            iconUrl: browser.runtime.getURL("icon.png"),
             title: "SoundTuner",
             message: "Saved for current page",
         });
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
         clearDomainCache();
         browser.notifications.create({
             type: "basic",
-            iconUrl: browser.extension.getURL("icon.png"),
+            iconUrl: browser.runtime.getURL("icon.png"),
             title: "SoundTuner",
             message: "Cleared all cache",
         });
