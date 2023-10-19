@@ -4,7 +4,8 @@ Extension to manipulate background sounds. Can lower/increase volume, add pan an
 
 ## Screenshots
 
-![Home](screenshot.png)
+![Light](screenshot.png)
+![Dark](screenshot-dark.png)
 
 ## Prerequisites
 
