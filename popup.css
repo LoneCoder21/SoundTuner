@@ -72,3 +72,23 @@ button:hover {
 #reset_button:hover {
     background-color: rgb(0, 202, 0);
 }
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: rgb(70, 70, 70);
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p {
+        color: white;
+    }
+    #default_button,
+    #reset_button {
+        background-color: rgb(220, 220, 220);
+        color: black;
+    }
+}
