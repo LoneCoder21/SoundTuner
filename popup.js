@@ -11,14 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
         mono: false,
     };
 
-    document.querySelector("#gain").addEventListener("change", (e) => {
+    document.querySelector("#gain").addEventListener("input", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);
         data.gain = value;
         sendData();
     });
 
-    document.querySelector("#pan").addEventListener("change", (e) => {
+    document.querySelector("#pan").addEventListener("input", (e) => {
         let value = parseFloat(e.target.value);
         panrange.textContent = value.toFixed(2);
         data.pan = value;
