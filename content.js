@@ -21,9 +21,21 @@
     const observer = new MutationObserver((records) => {
         for (const record of records) {
             record.addedNodes.forEach((node) => {
+                if (
+                    node.nodeType !== Node.ELEMENT_NODE &&
+                    node.nodeType !== Node.DOCUMENT_NODE &&
+                    node.nodeType !== Node.DOCUMENT_FRAGMENT_NODE
+                )
+                    return;
+
                 const name = node.nodeName.toLowerCase();
-                if (!(name === "video" || name === "audio")) return;
-                context.createMediaElementSource(node).connect(pan);
+                if (name === "video" || name === "audio") {
+                    context.createMediaElementSource(node).connect(pan);
+                    return;
+                }
+                node.querySelectorAll("video", "audio").forEach((e) => {
+                    context.createMediaElementSource(e).connect(pan);
+                });
             });
         }
     });
