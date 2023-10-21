@@ -28,6 +28,7 @@
             "run_at": "document_start"
         }
     ],
+    "web_accessible_resources": ["inject.js"],
     "permissions": [
         "activeTab",
         "storage",
