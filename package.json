@@ -6,7 +6,9 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "web-ext run",
-        "build": "web-ext build --overwrite-dest"
+        "build": "web-ext build --overwrite-dest",
+        "zip": "npm-build-zip --source=. --destination=build/ --name_only=true --name=soundtuner",
+        "build-zip": "npm run build && npm run zip"
     },
     "repository": {
         "type": "git",
@@ -22,6 +24,7 @@
     },
     "homepage": "https://github.com/LoneCoder21/SoundTuner#readme",
     "devDependencies": {
+        "npm-build-zip": "^1.0.4",
         "prettier": "3.0.3",
         "webextension-polyfill": "^0.10.0"
     }
