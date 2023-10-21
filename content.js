@@ -29,5 +29,6 @@
                 });
                 break;
         }
+        return true;
     });
 })();
