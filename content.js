@@ -5,7 +5,7 @@
     window.hasRun = true;
 
     const injectedScript = document.createElement("script");
-    injectedScript.src = browser.extension.getURL("inject.js");
+    injectedScript.src = browser.runtime.getURL("inject.js");
     (document.head || document.documentElement).appendChild(injectedScript);
 
     async function loadData() {
