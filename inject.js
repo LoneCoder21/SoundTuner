@@ -27,7 +27,6 @@ function attachNodeToContext(node) {
         if (medianodes.has(node)) {
             return;
         }
-        console.log(node);
         const source = context.createMediaElementSource(node);
         source.connect(pan);
         medianodes.add(node);
