@@ -11,6 +11,14 @@ document.addEventListener("DOMContentLoaded", () => {
         mono: false,
     };
 
+    document.querySelectorAll("a").forEach((target) => {
+        target.addEventListener("click", (e) => {
+            setTimeout(() => {
+                self.close();
+            }, 10);
+        });
+    });
+
     document.querySelector("#gain").addEventListener("input", (e) => {
         let value = parseFloat(e.target.value);
         gainrange.textContent = value.toFixed(2);

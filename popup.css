@@ -19,6 +19,15 @@ p {
 
 .flex {
     display: flex;
+    align-items: center;
+}
+
+.header {
+    justify-content: space-between;
+}
+
+.right {
+    margin-right: 10px;
 }
 
 .title {
@@ -58,6 +67,10 @@ button {
     font-weight: bold;
 }
 
+svg:hover {
+    fill: #f55050;
+}
+
 button:hover {
     background-color: #f55050;
 }
@@ -85,6 +98,12 @@ button:hover {
     h6,
     p {
         color: white;
+    }
+    svg {
+        fill: white;
+    }
+    svg:hover {
+        fill: #f55050;
     }
     #default_button,
     #reset_button {
