@@ -1,13 +1,12 @@
-let data = {
+const default_controls = {
     gain: 1.0,
     pan: 0.0,
     mono: false,
 };
 
-const default_controls = {
-    gain: 1.0,
-    pan: 0.0,
-    mono: false,
+let controls_changed = false;
+let data = {
+    ...default_controls,
 };
 
 let context = new AudioContext();
@@ -16,6 +15,10 @@ const gain = context.createGain();
 const pan = context.createStereoPanner();
 pan.connect(gain);
 gain.connect(context.destination);
+
+function checkIfObjectsAreEqual(obj1, obj2) {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+}
 
 function isPotentialCrossOrigin(node) {
     try {
@@ -26,24 +29,22 @@ function isPotentialCrossOrigin(node) {
     }
 }
 
-var trackednodes = new WeakSet();
-var untrackednodes = new Set();
+var trackednodes = new Set();
 
-function attachNodeToQueue(node) {
-    if (untrackednodes.has(node)) {
-        return;
-    }
-    untrackednodes.add(node);
+function attachControlsToNode(node) {
+    const source = context.createMediaElementSource(node);
+    source.connect(pan);
 }
 
 function attachNodeToContext(node) {
-    if (!isPotentialCrossOrigin(node)) {
-        if (trackednodes.has(node)) {
-            return;
-        }
-        const source = context.createMediaElementSource(node);
-        source.connect(pan);
-        trackednodes.add(node);
+    if (trackednodes.has(node) || isPotentialCrossOrigin(node)) {
+        return;
+    }
+
+    trackednodes.add(node);
+
+    if (controls_changed) {
+        attachControlsToNode(node);
     }
 }
 
@@ -59,21 +60,18 @@ const observer = new MutationObserver((records) => {
 
             const name = node.nodeName.toLowerCase();
             if (name === "video" || name === "audio") {
-                attachNodeToQueue(node);
+                attachNodeToContext(node);
                 return;
             }
             node.querySelectorAll("video", "audio").forEach((e) => {
-                attachNodeToQueue(e);
+                attachNodeToContext(e);
             });
         });
     }
 });
 
-const defaultcontrols_str = JSON.stringify(default_controls);
-let newcontrols_str = JSON.stringify(data);
-
 document.querySelectorAll("video", "audio").forEach((node) => {
-    attachNodeToQueue(node);
+    attachNodeToContext(node);
 });
 
 observer.observe(document, {
@@ -81,21 +79,19 @@ observer.observe(document, {
     subtree: true,
 });
 
-function setData() {
-    newcontrols_str = JSON.stringify(data);
-
-    if (defaultcontrols_str === newcontrols_str) {
-        return;
-    } // don't attach controls to nodes if it's default
-
-    for (const node of untrackednodes) {
-        attachNodeToContext(node);
-    }
-    untrackednodes = new Set();
+function setData(newdata) {
+    data = newdata;
 
     gain.gain.value = data.gain;
     pan.pan.value = data.pan;
     context.destination.channelCount = data.mono ? 1 : context_channels;
+
+    if (!controls_changed && !checkIfObjectsAreEqual(default_controls, data)) {
+        controls_changed = true;
+        for (const node of trackednodes) {
+            attachControlsToNode(node);
+        }
+    }
 }
 
 var attachShadow = HTMLElement.prototype.attachShadow;
@@ -113,8 +109,7 @@ HTMLElement.prototype.attachShadow = function (option) {
 window.addEventListener("message", (message) => {
     switch (message.data.command) {
         case "setData":
-            data = message.data.data;
-            setData();
+            setData(message.data.data);
             break;
     }
 });

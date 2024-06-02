@@ -1,6 +1,6 @@
 {
     "name": "soundtuner",
-    "version": "1.0.0",
+    "version": "1.3.0",
     "description": "Extension to manipulate background sounds.",
     "main": "index.js",
     "scripts": {
