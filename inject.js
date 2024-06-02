@@ -4,6 +4,12 @@ let data = {
     mono: false,
 };
 
+const default_controls = {
+    gain: 1.0,
+    pan: 0.0,
+    mono: false,
+};
+
 let context = new AudioContext();
 let context_channels = context.destination.channelCount;
 const gain = context.createGain();
@@ -20,16 +26,24 @@ function isPotentialCrossOrigin(node) {
     }
 }
 
-var medianodes = new WeakSet();
+var trackednodes = new WeakSet();
+var untrackednodes = new Set();
+
+function attachNodeToQueue(node) {
+    if (untrackednodes.has(node)) {
+        return;
+    }
+    untrackednodes.add(node);
+}
 
 function attachNodeToContext(node) {
     if (!isPotentialCrossOrigin(node)) {
-        if (medianodes.has(node)) {
+        if (trackednodes.has(node)) {
             return;
         }
         const source = context.createMediaElementSource(node);
         source.connect(pan);
-        medianodes.add(node);
+        trackednodes.add(node);
     }
 }
 
@@ -45,18 +59,21 @@ const observer = new MutationObserver((records) => {
 
             const name = node.nodeName.toLowerCase();
             if (name === "video" || name === "audio") {
-                attachNodeToContext(node);
+                attachNodeToQueue(node);
                 return;
             }
             node.querySelectorAll("video", "audio").forEach((e) => {
-                attachNodeToContext(e);
+                attachNodeToQueue(e);
             });
         });
     }
 });
 
+const defaultcontrols_str = JSON.stringify(default_controls);
+let newcontrols_str = JSON.stringify(data);
+
 document.querySelectorAll("video", "audio").forEach((node) => {
-    attachNodeToContext(node);
+    attachNodeToQueue(node);
 });
 
 observer.observe(document, {
@@ -65,6 +82,17 @@ observer.observe(document, {
 });
 
 function setData() {
+    newcontrols_str = JSON.stringify(data);
+
+    if (defaultcontrols_str === newcontrols_str) {
+        return;
+    } // don't attach controls to nodes if it's default
+
+    for (const node of untrackednodes) {
+        attachNodeToContext(node);
+    }
+    untrackednodes = new Set();
+
     gain.gain.value = data.gain;
     pan.pan.value = data.pan;
     context.destination.channelCount = data.mono ? 1 : context_channels;

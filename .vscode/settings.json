@@ -1,4 +1,5 @@
 {
     "eslint.enable": false,
-    "javascript.validate.enable": false
+    "javascript.validate.enable": false,
+    "window.autoDetectColorScheme": false
 }
