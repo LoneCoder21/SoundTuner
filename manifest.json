@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "SoundTuner",
-    "version": "1.2.2",
+    "version": "1.3.0",
     "author": "Abhinav Neelam",
     "description": "Extension to manipulate background sounds. Can lower/increase volume, add pan and mono. Can also save background sounds per website for future visits.",
     "homepage_url": "https://github.com/LoneCoder21/SoundTuner",
