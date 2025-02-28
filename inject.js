@@ -8,6 +8,7 @@ let controls_changed = false;
 let data = {
     ...default_controls,
 };
+let captcha_active = false;
 
 let context = new AudioContext();
 let context_channels = context.destination.channelCount;
@@ -48,6 +49,21 @@ function attachNodeToContext(node) {
     }
 }
 
+function detectCloudFlareCaptcha(node) {
+    return (
+        node.tagName &&
+        node.tagName.toLowerCase() === "script" &&
+        node.src &&
+        node.src.includes("challenges.cloudflare.com")
+    );
+}
+
+var originalAttachShadow = HTMLElement.prototype.attachShadow;
+
+function switchShadowToOriginal() {
+    HTMLElement.prototype.attachShadow = originalAttachShadow;
+} // go back to original shadow root if cloudflare captchas are detected.
+
 const observer = new MutationObserver((records) => {
     for (const record of records) {
         record.addedNodes.forEach((node) => {
@@ -59,6 +75,11 @@ const observer = new MutationObserver((records) => {
                 return;
 
             const name = node.nodeName.toLowerCase();
+
+            if (detectCloudFlareCaptcha(node)) {
+                switchShadowToOriginal();
+            }
+
             if (name === "video" || name === "audio") {
                 attachNodeToContext(node);
                 return;
@@ -67,6 +88,12 @@ const observer = new MutationObserver((records) => {
                 attachNodeToContext(e);
             });
         });
+    }
+});
+
+document.querySelectorAll("script").forEach((node) => {
+    if (detectCloudFlareCaptcha(node)) {
+        switchShadowToOriginal();
     }
 });
 
@@ -94,9 +121,8 @@ function setData(newdata) {
     }
 }
 
-var attachShadow = HTMLElement.prototype.attachShadow;
 HTMLElement.prototype.attachShadow = function (option) {
-    var sh = attachShadow.call(this, { mode: "open" });
+    var sh = originalAttachShadow.call(this, { mode: "open" });
 
     observer.observe(this.shadowRoot, {
         childList: true,
